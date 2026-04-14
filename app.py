@@ -9,55 +9,97 @@ st.set_page_config(page_title="Medical AI Assistant", layout="wide")
 # ----------- UI STYLING -----------
 st.markdown("""
 <style>
+
+/* BACKGROUND */
+body {
+    background-color: #0e1117;
+}
+
+/* MAIN CONTAINER */
 .main-container {
     max-width: 800px;
     margin: auto;
 }
 
+/* USER MESSAGE */
 .user-msg {
-    background: #007bff;
+    background: linear-gradient(135deg, #1f6feb, #388bfd);
     color: white;
-    padding: 10px;
-    border-radius: 12px;
-    margin: 5px 0;
+    padding: 12px;
+    border-radius: 14px;
+    margin: 8px 0;
     text-align: right;
+    font-size: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+/* BOT MESSAGE */
 .bot-msg {
-    background: #f1f3f4;
-    padding: 10px;
-    border-radius: 12px;
-    margin: 5px 0;
+    background: #1c1f26;
+    color: #e6edf3;
+    padding: 12px;
+    border-radius: 14px;
+    margin: 8px 0;
+    font-size: 15px;
+    border: 1px solid #30363d;
 }
 
+/* ALERT HIGH */
 .alert-high {
     background: #ff9800;
     color: white;
     padding: 10px;
     border-radius: 10px;
     margin: 10px 0;
+    font-weight: bold;
 }
 
+/* ALERT CRITICAL */
 .alert-critical {
     background: #ff4d4d;
     color: white;
     padding: 10px;
     border-radius: 10px;
     margin: 10px 0;
+    font-weight: bold;
 }
 
+/* HEADER */
 .header {
     text-align: center;
-    font-size: 30px;
+    font-size: 32px;
     font-weight: bold;
+    margin-bottom: 5px;
+    color: #e6edf3;
+}
+
+/* SUBTEXT */
+.subtext {
+    text-align: center;
+    color: #8b949e;
     margin-bottom: 20px;
 }
+
+/* INPUT FIX */
+.stChatInputContainer {
+    background-color: #161b22 !important;
+    border-top: 1px solid #30363d !important;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    color: #8b949e;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
 # ----------- HEADER -----------
 st.markdown('<div class="header">🩺 AI Medical Assistant</div>', unsafe_allow_html=True)
-st.markdown("### Welcome to your medical solutions")
+st.markdown('<div class="subtext">Welcome to your medical solutions</div>', unsafe_allow_html=True)
 
 # ----------- SESSION MEMORY -----------
 if "history" not in st.session_state:
@@ -107,12 +149,22 @@ if query:
     # Gemini response
     answer = ask_gemini(query, context)
 
-    # ----------- ADD SEVERITY ALERTS -----------
+    # ----------- SEVERITY ALERTS -----------
     if severity == "high":
-        answer = "⚠️ This seems persistent. Please consult a doctor soon.\n\n" + answer
+        answer = f"""
+<div class="alert-high">
+⚠️ This seems persistent. Please consult a doctor soon.
+</div>
+{answer}
+"""
 
     if severity == "critical":
-        answer = "🚨 URGENT: Seek immediate medical attention.\n\n" + answer
+        answer = f"""
+<div class="alert-critical">
+🚨 URGENT: Seek immediate medical attention.
+</div>
+{answer}
+"""
 
     st.session_state.history.append(("bot", answer))
 
@@ -125,8 +177,10 @@ for role, msg in st.session_state.history:
     else:
         st.markdown(f'<div class="bot-msg">{msg}</div>', unsafe_allow_html=True)
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------- FOOTER -----------
 st.markdown("---")
-st.markdown("⚠️ This is not medical advice. Always consult a doctor.")
+st.markdown('<div class="footer">⚠️ This is not medical advice. Always consult a doctor.</div>', unsafe_allow_html=True)
