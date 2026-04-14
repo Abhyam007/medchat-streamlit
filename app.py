@@ -37,7 +37,7 @@ if query:
 
     # Fallback context
     if not context:
-        context = "No relevant medical context found."
+        context = ""
 
     # Gemini response
     answer = ask_gemini(query, context)
