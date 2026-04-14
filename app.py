@@ -37,7 +37,7 @@ if query:
 
     # Fallback context
     if not context:
-        context = ""
+        context = "General medical knowledge"
 
     # Gemini response
     answer = ask_gemini(query, context)
