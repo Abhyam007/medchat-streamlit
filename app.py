@@ -5,7 +5,7 @@ from txt_engine import search_txt
 from gemini_engine import ask_gemini
 
 st.set_page_config(page_title="Medical AI Assistant", layout="wide")
-st.write("DEBUG KEY:", st.secrets.get("GEMINI_API_KEY"))
+st.write("Welcome to your medical solutions")
 
 st.title("🩺 AI Medical Assistant")
 
