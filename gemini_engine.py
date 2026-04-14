@@ -1,22 +1,20 @@
 import google.generativeai as genai
 from config import Config
 
-genai.configure(api_key=Config.GEMINI_API_KEY)
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+if Config.GEMINI_API_KEY:
+    genai.configure(api_key=Config.GEMINI_API_KEY)
+    model = genai.GenerativeModel("gemini-2.5-flash")
+else:
+    model = None
 
 def ask_gemini(query, context):
+    if not model:
+        return "⚠️ API key missing."
+
     prompt = f"""
 You are a medical assistant.
 
-STRICT RULES:
-- Use ONLY the given context
-- Be medically accurate
-- Answer in 2–3 lines
--if get bye then end with byee
-- No hallucination
-- If unsure say "I don't know"
-- End with: Consult a doctor if symptoms persist
+Use context if helpful, otherwise answer normally.
 
 Context:
 {context}
@@ -24,10 +22,14 @@ Context:
 Question:
 {query}
 
-Answer:
+Answer briefly (2–3 lines).
+End with: Consult a doctor if symptoms persist.
 """
+
     try:
         resp = model.generate_content(prompt)
-        return (resp.text or "").strip()
-    except:
-        return " server unavailable. Try again."
+        return (resp.text or "⚠️ Empty response").strip()
+
+    except Exception as e:
+        print("🚨 GEMINI ERROR:", str(e))   # IMPORTANT DEBUG
+        return "⚠️ AI service temporarily unavailable."
