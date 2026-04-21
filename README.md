@@ -1,43 +1,45 @@
+# MedChat Streamlit
+
 MedChat Streamlit is a Python application that connects patients and healthcare professionals through a secure, responsive chat interface. It pairs a Streamlit frontend with a Flask-style backend and a three-layer fallback system (CSV → TXT → Gemini) orchestrated by a RAG engine to provide reliable, context-aware responses.
 
-Repository Layout
-Code
+## Repository Layout
 medchat-streamlit/
-├── app.py                 # Main Streamlit frontend
-├── config.py              # Configuration settings
-├── csv_engine.py          # CSV data layer
-├── txt_engine.py          # TXT data layer
-├── gemini_engine.py       # Gemini AI layer
-├── rag_engine.py          # RAG orchestration and fallback logic
-├── requirements.txt       # Project dependencies
+├── app.py # Main Streamlit frontend
+├── config.py # Configuration settings
+├── csv_engine.py # CSV data layer
+├── txt_engine.py # TXT data layer
+├── gemini_engine.py # Gemini AI layer
+├── rag_engine.py # RAG orchestration and fallback logic
+├── requirements.txt # Project dependencies
 ├── data/
-│   ├── medical.csv        # Structured medical data (CSV Layer)
-│   └── medical.txt        # Unstructured medical documents (TXT Layer)
-├── vectorstore/           # Vector embeddings storage (for TXT/Gemini)
-└── .streamlit/            # Streamlit configuration
-Features
-Three-layer fallback system: CSV → TXT → Gemini (AI) with RAG orchestration.
+│ ├── medical.csv # Structured medical data (CSV Layer)
+│ └── medical.txt # Unstructured medical documents (TXT Layer)
+├── vectorstore/ # Vector embeddings storage (for TXT/Gemini)
+└── .streamlit/ # Streamlit configuration
 
-Real-time messaging: Streamlit UI with WebSocket-style updates (if implemented).
+text
 
-User authentication: Configurable via config.py.
+## Features
 
-Persistent chat history.
+- Three-layer fallback system: CSV → TXT → Gemini (AI) with RAG orchestration.
+- Real-time messaging: Streamlit UI with WebSocket-style updates (if implemented).
+- User authentication: Configurable via config.py.
+- Persistent chat history.
+- Search: Structured lookups (CSV) and full-text search (TXT) with vector embeddings for semantic search.
+- Extensible architecture: Separate engines for CSV, TXT, and Gemini layers and a central RAG orchestrator.
 
-Search: Structured lookups (CSV) and full-text search (TXT) with vector embeddings for semantic search.
+## Installation
 
-Extensible architecture: Separate engines for CSV, TXT, and Gemini layers and a central RAG orchestrator.
+### Prerequisites
 
-Installation
-Prerequisites
-Python 3.8 or later
+- Python 3.8 or later
+- pip (Python package manager)
 
-pip (Python package manager)
+### Steps
 
-Steps
-Clone the repository
+1. Clone the repository
 
-bash
+```bash
 git clone https://github.com/Abhyam007/medchat-streamlit.git
 cd medchat-streamlit
 Install dependencies
@@ -64,7 +66,7 @@ Authentication settings and database connection strings
 
 Example config.py entries:
 
-py
+python
 # config.py (example)
 DATA_DIR = "data"
 VECTORSTORE_DIR = "vectorstore"
@@ -82,7 +84,7 @@ bash
 streamlit run app.py
 Open the app
 
-Code
+text
 http://localhost:8501
 Interact
 
@@ -115,7 +117,7 @@ Preprocess text (tokenization, normalization) if you build a custom index.
 
 Example data/medical.txt
 
-Code
+text
 2025-04-01 | Patient A | Hypertension follow-up
 Patient reports improved BP control on Drug X. Continue current dose. Monitor renal function.
 Vectorstore / Embeddings
@@ -148,19 +150,16 @@ Each step returns a confidence score used by rag_engine.py to decide escalation 
 
 Usage Examples
 Example 1 — Dosage Lookup
-
 User: "What is the recommended dose for Drug X?"
 
 Flow: csv_engine.py finds a match in data/medical.csv → returns dosage and source reference.
 
 Example 2 — Document Search
-
 User: "Find information about hypertension management"
 
 Flow: txt_engine.py performs semantic search over data/medical.txt and vectorstore → returns ranked snippets and references.
 
 Example 3 — Synthesis
-
 User: "Combine guidance on drug interactions with clinical notes"
 
 Flow: rag_engine.py collects CSV and TXT results and calls gemini_engine.py to synthesize a cohesive explanation with confidence scoring.
